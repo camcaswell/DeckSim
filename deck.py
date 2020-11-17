@@ -34,7 +34,7 @@ class Deck:
     def __str__(self):
         return f"Full:    {self.full}\nCurrent: {self.current}"
 
-    def draw(self):
+    def draw(self, adv=False, disadv=False):
         top = self._draw()
         drawn = [top]
         while top.roll:
@@ -42,7 +42,14 @@ class Deck:
             drawn.append(top)
         if any(c.shuffle for c in drawn):
             self.reshuffle()
-        return sum(c.val for c in drawn)
+        val1 = sum(c.val for c in drawn)
+
+        if adv:
+            return max(val1, self.draw())
+        elif disadv:
+            return min(val1, self.draw())
+        else:
+            return val1
 
     def _draw(self):
         if not self.current:
