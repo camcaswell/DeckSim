@@ -2,7 +2,7 @@ import random
 from math import inf as INF
 
 class Card:
-    def __init__(self, val, shuffle=None):
+    def __init__(self, val, shuffle=None, roll=False):
         self.val = val
         if shuffle is None:
             if val in (2, -INF):
@@ -10,6 +10,7 @@ class Card:
             else:
                 shuffle = False
         self.shuffle = shuffle
+        self.roll = roll
 
     def __repr__(self):
         return str(self.val)
@@ -34,12 +35,19 @@ class Deck:
         return f"Full:    {self.full}\nCurrent: {self.current}"
 
     def draw(self):
+        top = self._draw()
+        drawn = [top]
+        while top.roll:
+            top = self._draw()
+            drawn.append(top)
+        if any(c.shuffle for c in drawn):
+            self.reshuffle()
+        return sum(c.val for c in drawn)
+
+    def _draw(self):
         if not self.current:
             self.reshuffle()
-        top = self.current.pop()
-        if top.shuffle:
-            self.reshuffle()
-        return top
+        return self.current.pop()
 
     def reshuffle(self):
         self.current = self.full[:]

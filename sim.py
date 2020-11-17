@@ -13,11 +13,16 @@ a = [Card(v) for v in
 
 b = [Card(v,s) for v,s in 
                   1 * ((-2, True),)
+a = [Card(v,s) for v,s in 
+                  1 * ((-INF, True),)
                 + 3 * ((-1, False),)
                 + 5 * ((0, False),)
                 + 3 * ((1, False),)
                 + 1 * ((2, True),)
             ]
+
+b = a + 2 * [Card(1, roll=True)]
+
 
 ATK = 4
 d1 = Deck(a)
@@ -29,7 +34,7 @@ results = []
 for d in (d1, d2):
     total = 0
     for _ in range(n):
-        md = d.draw().val
+        md = d.draw()
         dmg = max(0, ATK+md)
         total += dmg
     results.append(total/n)
