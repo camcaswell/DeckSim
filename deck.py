@@ -35,6 +35,8 @@ class Deck:
         return f"Full:    {self.full}\nCurrent: {self.current}"
 
     def draw(self, adv=False, disadv=False):
+        if adv and disadv:
+            adv = disadv = False
         top = self._draw()
         drawn = [top]
         while top.roll:
